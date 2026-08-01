@@ -1,0 +1,18 @@
+<header class="app-header-inner">
+    <div class="header-main">
+        <div class="brand-section">
+            <div class="rooster-icon">🐓</div>
+            <div>
+                <div class="brand-title">{{farmName()}}</div>
+                <span class="batch-tag">BATCH: {{batchCode()}}</span>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="welcome-text">Welcome <span class="user-name">{{userFullName()}}</span></div>
+            <div class="header-buttons">
+                <button class="btn-header" [routerLink]="['/home']">Home</button>
+                <button class="btn-header" (click)="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+</header>

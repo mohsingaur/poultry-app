@@ -1,0 +1,58 @@
+<!-- Alert Feedback -->
+@if (showSuccessAlert()) {
+<div class="alert alert-success">
+    <span class="alert-icon">✓</span>
+    <div class="alert-content">
+        <h4>Success</h4>
+        <p>Logged in successfully!</p>
+    </div>
+</div>
+}
+
+@if (showErrorAlert()) {
+<div class="alert alert-error">
+    <span class="alert-icon">⚠️</span>
+    <div class="alert-content">
+        <h4>Error</h4>
+        <p>{{ errorMsg() || 'Failed to login, Kindly connect admin!'}}</p>
+    </div>
+</div>
+}
+<div style=" display: flex;flex-direction: column; justify-content: center; align-items: center;">
+    <!-- <div class="entry-form-container"> -->
+    <div class="form-heading">Login</div>
+    <form [formRoot]="loginForm">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-input" [formField]="loginForm.username" placeholder="Your Username">
+                @if (loginForm.username().touched() && loginForm.username().invalid()) {
+                @for(error of loginForm.username().errors(); track error) {
+                <p class="error">{{ error.message }}</p>
+                }
+                }
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" [formField]="loginForm.password" placeholder="Your password">
+                @if (loginForm.password().touched() && loginForm.password().invalid()) {
+                @for(error of loginForm.password().errors(); track error) {
+                <p class="error">{{ error.message }}</p>
+                }
+                }
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm().invalid() || isLoading()">
+                @if (isLoading()) {
+                <span class="btn-loader">
+                    <span class="spinner"></span> Logging In...
+                </span>
+                } @else {
+                <span>⚡ Login</span>
+                }
+            </button>
+        </div>
+    </form>
+</div>
+<!-- </div> -->

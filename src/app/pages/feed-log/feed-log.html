@@ -1,0 +1,127 @@
+<div class="log-card">
+
+    <!-- CARD HEADER (FIXED ON TOP OF CARD) -->
+    <div class="card-header-fixed">
+        <div class="card-title-bar">
+            <h2 class="card-title">{{ isFormOpen() ? 'New Daily Feed Entry' : 'Feed Log' }}</h2>
+            <button class="btn-new-entry" [class.active-cancel]="isFormOpen()" (click)="toggleFormView()">
+                {{ isFormOpen() ? '✕ Close Form' : '+ New Entry' }}
+            </button>
+        </div>
+        <p class="card-description">
+            {{ isFormOpen() ?
+            'Fill in Feed details' :
+            'Feed Log Details' }}
+        </p>
+    </div>
+
+    <!-- 3. SCROLLABLE CONTAINER (TABLE OR FORM) -->
+    <div class="content-scroll-area">
+
+        <!-- VIEW A: DATA TABLE -->
+        @if (!isFormOpen()) {
+        <div id="table-view">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Feed Type</th>
+                        <th>Receipt Date</th>
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data rows rendered by Javascript -->
+                    @for(item of logEntries(); track $index){
+                    <tr>
+                        <td>{{item.feed.itemName}}</td>
+                        <td>{{item.receiptDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{item.feed.itemCode}}</td>
+                        <td>{{item.feed.itemDescription}}</td>
+                        <td>{{item.quantity}} <span class="symbol-hash">(bags)</span></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+
+        <!-- New Entry Form View -->
+        @else{
+        <div class="entry-form-container">
+            <div class="form-heading">✍️ Enter Feed Record</div>
+            <form [formRoot]="feedLogForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Feed Type</label>
+                        <select [formField]="feedLogForm.feedId" class="form-input">
+                            <option value="">Select Feed Type</option>
+                            @for(feed of feedTypeMaster(); track feed.id){
+                            <option [value]="feed.id">{{feed.itemName}} -
+                                {{feed.itemDescription}} - {{feed.itemCode}}
+                            </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Delivery Date</label>
+                        <input type="text" class="form-input" [formField]="feedLogForm.receiptDate"
+                            placeholder="e.g. 8965678">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Order Number</label>
+                        <input type="text" class="form-input" [formField]="feedLogForm.orderNumber"
+                            placeholder="e.g. 8965678">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-input" [formField]="feedLogForm.quantity"
+                            placeholder="e.g. 150">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Weight Per Bag</label>
+                        <input type="number" class="form-input" [formField]="feedLogForm.weightPerBag"
+                            placeholder="e.g. 60">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price Per Kg</label>
+                        <input type="number" class="form-input" [formField]="feedLogForm.pricePerKg"
+                            placeholder="e.g. 40">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Driver Name</label>
+                        <input type="text" class="form-input" [formField]="feedLogForm.driverName"
+                            placeholder="e.g. Mohan">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Driver Contact</label>
+                        <input type="text" class="form-input" [formField]="feedLogForm.driverContact"
+                            placeholder="e.g. 1234567890">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vehicle Number</label>
+                        <input type="text" class="form-input" [formField]="feedLogForm.vehicleNumber"
+                            placeholder="e.g. DL3SED5641">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" (click)="toggleFormView(false)"
+                        [disabled]="isLoading">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="feedLogForm().invalid() || isLoading">
+                        @if (isLoading) {
+                        <span class="btn-loader">
+                            <span class="spinner"></span> Saving...
+                        </span>
+                        } @else {
+                        <span>⚡ Save Entry</span>
+                        }
+                    </button>
+                </div>
+            </form>
+        </div>
+        }
+
+    </div>
+
+</div>

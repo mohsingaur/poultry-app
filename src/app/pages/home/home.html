@@ -1,0 +1,120 @@
+<!-- Loading Spinner -->
+@if (isLoading()) {
+<div class="loader-container">
+    <div class="loading-glow"></div>
+    <p>Retrieving reference metrics from database...</p>
+</div>
+}
+@if (!isLoading() && batch() == null) {
+<!-- Empty State -->
+<div class="empty-state">
+    <div class="empty-icon">📂</div>
+    <h3>No batch assigned to you yet</h3>
+    <p>
+        Kindly connect with your Admin.
+    </p>
+</div>
+}
+
+@if (!isLoading() && batch()) {
+<div class="detail-info" style="margin-top: 1rem;">
+    <div class="detail-item">
+        <span class="label">Start Date:</span>
+        <span class="value">{{ batch().startDate | date: 'dd-MM-yyyy' }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Chicks Age</span>
+        <span class="value">
+            {{ getAgeInDays(batch().startDate) }}
+            <small>(Days)</small>
+        </span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Housed Chicks</span>
+        <span class="value">{{ batch().housedChicks }}
+            <small>#</small>
+        </span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Total Mortality</span>
+        <span class="value">{{ batch().totalMortality }}
+            <small>#</small>
+        </span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Mortality %</span>
+        <span class="value">{{ (batch().totalMortality / batch().housedChicks * 100) | number:'1.2-2' }}
+            <small>%</small></span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Live Birds</span>
+        <span class="value">{{ batch().liveBirdsStock }}
+            <small>#</small>
+        </span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Avg Body Weight</span>
+        <span class="value">{{ batch().chicksAvgWeight | number: '1.0-0'}} <small>(GMS)</small></span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Total Birds Weight</span>
+        <span class="value">{{ batch().liveBirdsTotalWeight | number: '1.0-0'}} <small>(KG)</small></span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Feed Received</span>
+        <span class="value">{{ batch().totalBagsReceived }}
+            <small>(BAGS)</small>
+        </span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Feed Consumed </span>
+        <span class="value">
+            {{ batch().totalFeedConsumed || 0 }} <small>(KG)</small>~
+            {{ (batch().totalFeedConsumed || 0) / 60 }} <small>(BAGS)</small>
+        </span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Closing Stock</span>
+        <span class="value">{{ (batch().totalBagsReceived || 0) - (batch().totalFeedConsumed || 0) / 60 }}
+            <small>(BAGS)</small>
+        </span>
+    </div>
+
+    <div class="detail-item">
+        <span class="label">Feed Cost/Chick</span>
+        <span class="value">
+            {{ (batch().totalFeedConsumed * batch().feedPricePerKg / batch().liveBirdsStock) | number: '1.0-0'
+            }}
+            <small>(₹)</small>
+        </span>
+    </div>
+    <div class="detail-item">
+        <span class="label">FCR</span>
+        <span class="value">{{ batch().currentFCR }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="label">EPI Score</span>
+        <span class="value">{{ batch().currentEPI }}</span>
+    </div>
+    <div class="detail-item">
+        <span class="label">Batch Performance</span>
+        <span class="value">{{ batch().batchStandardEPI }}</span>
+    </div>
+
+
+    <div class="detail-item">
+        <span class="label">Status:</span>
+        <span class="value">{{ batch().batchStatus ? 'Active' : 'Closed' }}</span>
+    </div>
+</div>
+}
+
+@if(!isLoading() && batch()){
+<div style="width: 100%; display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 1rem;  ">
+    <button class="btn btn-primary" (click)="refreshBatchPerformance(batch().batchId)" [disabled]="isLoading()">
+        <!-- <mat-icon>dashboard</mat-icon> -->
+        Refresh
+    </button>
+</div>
+}

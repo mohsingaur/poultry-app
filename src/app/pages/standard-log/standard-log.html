@@ -1,0 +1,52 @@
+<div class="log-card">
+
+    <!-- CARD HEADER (FIXED ON TOP OF CARD) -->
+    <div class="card-header-fixed">
+        <div class="card-title-bar">
+            <h2 class="card-title">{{ isFormOpen() ? 'Upload Standard Daily Log' : 'Standard Daily Log' }}</h2>
+            <button class="btn-new-entry" [class.active-cancel]="isFormOpen()" (click)="toggleFormView()">
+                {{ isFormOpen() ? '✕ Close Form' : '+ Upload' }}
+            </button>
+        </div>
+        <p class="card-description">
+            {{ isFormOpen() ?
+            'Fill in Standard Daily Feed details' :
+            'Standard Daily Feed Log Details' }}
+        </p>
+    </div>
+
+    <!-- 3. SCROLLABLE CONTAINER (TABLE OR FORM) -->
+    <div class="content-scroll-area">
+
+        <!-- VIEW A: DATA TABLE -->
+        <div id="table-view">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>AGE (DAYS)</th>
+                        <th>Std Feed Intake</th>
+                        <th>Std Body Weight</th>
+                        <th>Std FCR</th>
+                        <th>Std Temperature</th>
+                        <th>Std Humidity</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Data rows rendered by Javascript -->
+                    @for(item of logEntries(); track $index){
+                    <tr>
+                        <td class="col-green">Day {{item.ageDays}}</td>
+                        <td>{{item.standardFeedIntake}}</td>
+                        <td>{{item.standardBodyWeight}}</td>
+                        <td>{{item.standardFCR}}</td>
+                        <td>{{item.temperature}}</td>
+                        <td>{{item.humidity}}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
