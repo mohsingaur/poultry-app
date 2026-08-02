@@ -105,10 +105,10 @@
     </div>
 
 
-    <div class="detail-item">
+    <!-- <div class="detail-item">
         <span class="label">Batch Status:</span>
         <span class="value">{{ selectedBatch().batchStatus ? 'Active' : 'Closed' }}</span>
-    </div>
+    </div> -->
 </div>
 }
 
@@ -120,3 +120,24 @@
     </button>
 </div>
 }
+
+<div class="content-scroll-area">
+    <div class="charts-grid">
+        @for (chart of chartsData(); track $index) {
+        <div class="charts-item jumbotron-card">
+            <div class="chart-header">
+                <h3 class="chart-title">{{ chart.chartTitle }}</h3>
+                <p class="chart-subtitle">Overview and analytical breakdown</p>
+            </div>
+
+            <div class="chart-body">
+                <div class="chart-wrapper">
+                    <app-chart [type]="chart.type" [data]="chart.data" [options]="chart.options">
+                    </app-chart>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+</div>

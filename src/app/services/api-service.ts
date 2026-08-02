@@ -7,8 +7,8 @@ import { Utility } from '../utility/data-store';
   providedIn: 'root',
 })
 export class ApiService {
-  // private readonly baseUrl = 'http://localhost:3004/api/v1';
-  private readonly baseUrl = 'https://saspf-server-zm7y.onrender.com/api/v1';
+  private readonly baseUrl = 'http://localhost:3004/api/v1';
+  // private readonly baseUrl = 'https://saspf-server-zm7y.onrender.com/api/v1';
   private readonly http = inject(HttpClient);
 
   getBatchPerformance(id: number): Observable<any> {
