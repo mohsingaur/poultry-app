@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { form, FormRoot, FormField } from '@angular/forms/signals';
+import { form, FormRoot, FormField, required } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-daily-log',
@@ -14,7 +14,7 @@ export class DailyLog {
   isFormOpen = signal<boolean>(false);
   batchId: string = '';
   companyId: string = '';
-  isLoading: boolean = false;
+  isLoading = signal<boolean>(false);
   logEntries = signal<any[]>([]);
 
   // inject dependencies
@@ -31,7 +31,12 @@ export class DailyLog {
     batchId: '',
   });
 
-  dailyLogForm = form(this.dailyLogModel, (path) => { }, {
+  dailyLogForm = form(this.dailyLogModel, (path) => {
+    required(path.dailyBodyWeight, { message: 'Daily body weight is required' });
+    required(path.dailyMortality, { message: 'Daily mortality is required' });
+    required(path.dailyFeedBagsConsumed, { message: 'Daily feed bags consumed is required' });
+    required(path.noOfBirdsForWeight, { message: 'Number of birds for weight is required' });
+  }, {
     submission: {
       action: async (field) => {
         let payload = field().value();
@@ -44,6 +49,7 @@ export class DailyLog {
   });
 
   toggleFormView(state?: boolean) {
+    console.log("state", state);
     this.isFormOpen.set(typeof state === 'boolean' ? state : !this.isFormOpen());
   }
 
@@ -56,16 +62,16 @@ export class DailyLog {
   }
 
   getDailyBatchRecord() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.apiService.get('/log/daily/actual', { batchId: this.batchId }, (res: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       // console.log("Get daily records", res.data);
       if (res.success) {
         res.data.sort((a: any, b: any) => Number(b.ageDays) - Number(a.ageDays));
         this.logEntries.set(res.data);
       }
     }, (err: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       console.log(err);
     });
   }
@@ -92,14 +98,15 @@ export class DailyLog {
   }
 
   postDailyEntry(payload: any) {
+    this.isLoading.set(true);
     this.apiService.post('/log/daily/actual', payload, (res: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       if (res.success) {
         this.toggleFormView(false);
         this.getDailyBatchRecord();
       }
     }, (err: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       console.log(err);
     });
   }

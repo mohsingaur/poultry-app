@@ -17,8 +17,26 @@
 
     <!-- 3. SCROLLABLE CONTAINER (TABLE OR FORM) -->
     <div class="content-scroll-area">
+        <!-- Loading Spinner -->
+        @if (isLoading() && logEntries()?.length == 0) {
+        <div class="loader-container">
+            <div class="loading-glow"></div>
+            <p>Retrieving reference standard log from database...</p>
+        </div>
+        }
+        @if (!isLoading() && logEntries()?.length == 0) {
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h3>No Standard log found for this batch</h3>
+            <p>
+                Kindly upload the Standard log.
+            </p>
+        </div>
+        }
 
         <!-- VIEW A: DATA TABLE -->
+        @if(!isFormOpen() && logEntries().length > 0) {
         <div id="table-view">
             <table class="data-table">
                 <thead>
@@ -31,7 +49,7 @@
                         <th>Std Humidity</th>
                     </tr>
                 </thead>
-                <tbody id="table-body">
+                <tbody>
                     <!-- Data rows rendered by Javascript -->
                     @for(item of logEntries(); track $index){
                     <tr>
@@ -46,7 +64,62 @@
                 </tbody>
             </table>
         </div>
+        }
 
+        @else if(isFormOpen()){
+        <!-- Feedback Messages -->
+        @if (uploadSuccess()) {
+        <div class="alert alert-success">
+            <span class="alert-icon">✓</span>
+            <div class="alert-content">
+                <h4>Success</h4>
+                <p>Standard farm records imported successfully!</p>
+            </div>
+        </div>
+        }
+        @if (uploadError()) {
+        <div class="alert alert-error">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-content">
+                <h4>Import Error</h4>
+                <p>{{ uploadError() }}</p>
+            </div>
+        </div>
+        }
+
+        <div class="entry-form-container" style="text-align: center;">
+            <div class="form-heading">✍️ Upload excel file</div>
+            <!-- Drag & Drop / Click Zone -->
+            <div class="upload-dropzone" (click)="fileInput.click()" [class.has-file]="selectedFile()">
+                <input type="file" #fileInput id="excelFileInput" (change)="onFileSelected($event)"
+                    accept=".xlsx, .xls, .xlsm" style="display: none;" />
+
+                <div class="dropzone-content">
+                    <span class="dropzone-icon">📊</span>
+                    @if (!selectedFile()) {
+                    <h3>Choose Excel File</h3>
+                    <p>Drag & drop or click to browse</p>
+                    } @else {
+                    <h3 class="file-name">{{ selectedFileName() }}</h3>
+                    <p class="file-size">Ready for import</p>
+                    }
+                </div>
+            </div>
+            <!-- Upload Action Button -->
+            @if (!isUploading()) {
+            <button class="btn btn-primary" [disabled]="!selectedFile() || isUploading()" (click)="uploadExcel()">
+                <span>⚡ Parse & Import Excel</span>
+            </button>
+            }
+            @if (isUploading()) {
+            <button class="btn btn-primary" [disabled]="!selectedFile() || isUploading()">
+                <span class="btn-loader">
+                    <span class="spinner"></span> Processing File...
+                </span>
+            </button>
+            }
+        </div>
+        }
     </div>
 
 </div>

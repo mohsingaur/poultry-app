@@ -92,32 +92,32 @@ main.main-wrapper>*:not(router-outlet) {
 // Home page styling
 .detail-info {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem;
 
     .detail-item {
-        padding: 0.2rem 0;
+        padding-bottom: 0.2rem;
         border-bottom: 1px solid #ffffff1a;
         display: flex;
         flex-direction: column;
         align-items: self-start;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0.3rem;
         overflow: auto;
 
         .label {
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             font-weight: 300;
             color: #ffffff99;
         }
 
         .value {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 400;
             color: #ffffff;
 
             small {
-                font-size: 0.5rem;
+                font-size: 0.55rem;
                 font-weight: 300;
                 color: #36f700;
             }
@@ -468,7 +468,76 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
 
-// Button styling
+/* Dropzone (Drag & Drop UI) */
+.upload-dropzone {
+    border: 2px dashed #8b5cf64d;
+    background: #8b5cf605;
+    border-radius: 16px;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 1.5rem auto;
+    max-width: 200px;
+
+    &:hover {
+        border-color: #a78bfa;
+        background: rgba(139, 92, 246, 0.06);
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+    }
+
+    &.has-file {
+        border-style: solid;
+        border-color: #34d399;
+        background: #34d39908;
+        box-shadow: 0 0 20px #34d39914;
+
+        .dropzone-icon {
+            filter: drop-shadow(0 0 10px #34d39966);
+        }
+    }
+
+    .dropzone-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+
+        .dropzone-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            margin: 0;
+
+            &.file-name {
+                color: #34d399;
+                word-break: break-all;
+            }
+        }
+
+        p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin: 0;
+
+            &.file-size {
+                color: #94a3b8;
+                font-weight: 500;
+            }
+        }
+    }
+
+    &:hover .dropzone-icon {
+        transform: scale(1.1);
+    }
+}
+
+
 /* Button Styling */
 .btn {
     display: inline-flex;
@@ -536,6 +605,34 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .btn-block {
     display: flex;
     width: 100%;
+}
+
+/* Empty State Styling */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5rem 2rem;
+    gap: 1.5rem;
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.4;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        font-size: 0.9rem;
+        max-width: 300px;
+        margin: 0;
+        line-height: 1.5;
+    }
 }
 
 /* Loader Styling */
@@ -627,8 +724,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 10px;
 }
 
-.nav-item.active {
-    color: #22c55e;
+.active {
+    color: #02fc5e;
+    font-weight: 600;
 }
 
 .nav-icon {

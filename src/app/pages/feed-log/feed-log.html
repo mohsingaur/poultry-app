@@ -17,9 +17,27 @@
 
     <!-- 3. SCROLLABLE CONTAINER (TABLE OR FORM) -->
     <div class="content-scroll-area">
+        <!-- Loading Spinner -->
+        @if (isLoading() && logEntries()?.length == 0) {
+        <div class="loader-container">
+            <div class="loading-glow"></div>
+            <p>Retrieving reference feed log from database...</p>
+        </div>
+        }
+        @if (!isLoading() && logEntries()?.length == 0) {
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h3>No feed log found for this batch</h3>
+            <p>
+                Kindly add a new feed log.
+            </p>
+        </div>
+        }
 
         <!-- VIEW A: DATA TABLE -->
-        @if (!isFormOpen()) {
+
+        @if (!isFormOpen() && logEntries().length > 0) {
         <div id="table-view">
             <table class="data-table">
                 <thead>
@@ -48,7 +66,7 @@
         }
 
         <!-- New Entry Form View -->
-        @else{
+        @else if (isFormOpen()) {
         <div class="entry-form-container">
             <div class="form-heading">✍️ Enter Feed Record</div>
             <form [formRoot]="feedLogForm">
@@ -66,12 +84,12 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Delivery Date</label>
-                        <input type="text" class="form-input" [formField]="feedLogForm.receiptDate"
+                        <input type="date" class="form-input" [formField]="feedLogForm.receiptDate"
                             placeholder="e.g. 8965678">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Order Number</label>
-                        <input type="text" class="form-input" [formField]="feedLogForm.orderNumber"
+                        <input type="number" class="form-input" [formField]="feedLogForm.orderNumber"
                             placeholder="e.g. 8965678">
                     </div>
                     <div class="form-group">
@@ -96,7 +114,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Driver Contact</label>
-                        <input type="text" class="form-input" [formField]="feedLogForm.driverContact"
+                        <input type="number" class="form-input" [formField]="feedLogForm.driverContact"
                             placeholder="e.g. 1234567890">
                     </div>
                     <div class="form-group">
@@ -107,9 +125,9 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-outline" (click)="toggleFormView(false)"
-                        [disabled]="isLoading">Cancel</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="feedLogForm().invalid() || isLoading">
-                        @if (isLoading) {
+                        [disabled]="isLoading()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="feedLogForm().invalid() || isLoading()">
+                        @if (isLoading()) {
                         <span class="btn-loader">
                             <span class="spinner"></span> Saving...
                         </span>

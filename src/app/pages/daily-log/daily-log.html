@@ -17,9 +17,26 @@
 
     <!-- INNER SCROLLABLE AREA (ONLY THIS SECTION SCROLLS) -->
     <div class="content-scroll-area">
+        <!-- Loading Spinner -->
+        @if (isLoading() && logEntries()?.length == 0) {
+        <div class="loader-container">
+            <div class="loading-glow"></div>
+            <p>Retrieving reference daily log from database...</p>
+        </div>
+        }
+        @if (!isLoading() && logEntries()?.length == 0) {
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h3>No daily log found for this batch</h3>
+            <p>
+                Kindly add a new daily log.
+            </p>
+        </div>
+        }
 
         <!-- Table View -->
-        @if (!isFormOpen()) {
+        @if (!isFormOpen() && logEntries().length > 0) {
         <table class="data-table">
             <thead>
                 <tr>
@@ -43,7 +60,7 @@
             </tbody>
         </table>
         }
-        @else{
+        @else if (isFormOpen()) {
         <!-- New Entry Form View -->
         <div class="entry-form-container">
             <div class="form-heading">✍️ Enter Today's Record</div>
@@ -77,9 +94,9 @@
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-outline" (click)="toggleFormView(false)"
-                        [disabled]="isLoading">Cancel</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="dailyLogForm().invalid() || isLoading">
-                        @if (isLoading) {
+                        [disabled]="isLoading()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="dailyLogForm().invalid() || isLoading()">
+                        @if (isLoading()) {
                         <span class="btn-loader">
                             <span class="spinner"></span> Saving...
                         </span>

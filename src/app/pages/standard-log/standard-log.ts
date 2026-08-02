@@ -16,8 +16,13 @@ export class StandardLog {
   feedTypeMaster = signal<any[]>([]);
   batchId: string = '';
   companyId: string = '';
-  isLoading: boolean = false;
+  isLoading = signal<boolean>(false);
   logEntries = signal<any[]>([]);
+  selectedFile = signal<File | null>(null);
+  selectedFileName = signal<string | null>(null);
+  uploadSuccess = signal(false);
+  uploadError = signal<string | null>(null);
+  isUploading = signal(false);
 
   // inject dependencies
   private apiService = inject(ApiService);
@@ -35,9 +40,6 @@ export class StandardLog {
     submission: {
       action: async (field) => {
         let payload = field().value();
-        payload.companyId = this.companyId;
-        console.log(payload);
-        this.uploadStdEntry(payload);
       }
     }
   });
@@ -60,15 +62,15 @@ export class StandardLog {
   }
 
   getStdRecord() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.apiService.get('/log/daily/standard', { companyId: this.companyId }, (res: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       // console.log("Get daily records", res.data);
       if (res.success) {
         this.logEntries.set(res.data);
       }
     }, (err: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       console.log(err);
     });
   }
@@ -77,16 +79,43 @@ export class StandardLog {
     this.toggleFormView(false);
   }
 
-  uploadStdEntry(payload: any) {
-    this.apiService.post('/feed/receipt', payload, (res: any) => {
-      this.isLoading = false;
+  onFileSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    const file = fileInput.files?.[0];
+
+    if (file) {
+      this.selectedFile.set(file);
+      this.selectedFileName.set(file.name);
+      console.log("Selected file:", file);
+    }
+  }
+
+  uploadExcel() {
+    const file = this.selectedFile();
+    if (!file) {
+      console.warn('No file selected for upload.');
+      return;
+    }
+    this.isLoading.set(true);
+    const formData = new FormData();
+    formData.append('companyId', this.companyId);
+    formData.append('file', file, file.name);
+
+    // formData.forEach((value, key) => console.log(key, value));
+
+    this.uploadStdEntry(formData);
+  }
+
+  uploadStdEntry(payload: FormData) {
+    this.apiService.post('/log/daily/standard/upload', payload, (res: any) => {
+      this.isLoading.set(false);
       if (res.success) {
         this.toggleFormView(false);
         this.getStdRecord();
       }
     }, (err: any) => {
-      this.isLoading = false;
-      console.log(err);
+      this.isLoading.set(false);
+      console.error('Upload failed:', err);
     });
   }
 

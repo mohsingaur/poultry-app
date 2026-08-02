@@ -1,6 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { BatchPerformance } from '../../services/batch-performance';
+import { Utility } from '../../utility/data-store';
 
 @Component({
   selector: 'app-home',
@@ -11,26 +13,35 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 export class Home {
 
   isLoading = signal(false);
-  batch = signal<any>({});
-  apiService = inject(ApiService);
+  selectedBatch = signal<any>({});
+
+  private apiService = inject(ApiService);
 
   constructor() {
-    let b = this.apiService.getDefaultBatch();
-    this.batch.set(b);
-    // console.log("On constructor batch data", this.batch());
+    this.selectedBatch.set(Utility.getBatches().filter((b: any) => b.isDefaultBatch == true)[0]);
+    // console.log("OselectedBatchn constructor batch data", this.selectedBatch());
   }
 
-  refreshBatchPerformance(batchId: any) {
+  reloadBatchPerformance(batchId: any) {
     this.isLoading.set(true);
-    this.apiService.getBatchPerformance(batchId).subscribe(
-      (res: any) => {
-        this.batch.set(res.data);
-        console.log("On refresh call batch data", this.batch());
+    this.apiService.getBatchPerformance(batchId).subscribe({
+      next: (res: any) => {
+        let batches = Utility.getBatches();
+        let updatedBatches = batches.map((batch: any) => {
+          if (batch.batchId == res.data.batchId) {
+            return { ...batch, ...res.data }
+          }
+          return batch;
+        })
+        Utility.setBatches(updatedBatches);
+        this.selectedBatch.set(updatedBatches.filter((b: any) => b.isDefaultBatch == true)[0]);
         this.isLoading.set(false);
-      }, (err: any) => {
+      },
+      error: (err: any) => {
+        console.error("Header reload error", err?.error);
         this.isLoading.set(false);
       }
-    )
+    });
   }
 
   getAgeInDays(startDate: Date | string, endDate?: Date | string): number {

@@ -11,11 +11,11 @@ import { DatePipe } from '@angular/common';
   styleUrl: './feed-log.scss',
 })
 export class FeedLog {
+  isLoading = signal<boolean>(false);
   isFormOpen = signal<boolean>(false);
   feedTypeMaster = signal<any[]>([]);
   batchId: string = '';
   companyId: string = '';
-  isLoading: boolean = false;
   logEntries = signal<any[]>([]);
 
   // inject dependencies
@@ -33,8 +33,7 @@ export class FeedLog {
     pricePerKg: '',
     driverName: '',
     driverContact: '',
-    vehicleNumber: '',
-    isActive: '',
+    vehicleNumber: ''
   });
 
   feedLogForm = form(this.feedLogModel, (path) => {
@@ -79,16 +78,16 @@ export class FeedLog {
   }
 
   getFeedRecord() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.apiService.get('/feed/receipt', { batchId: this.batchId }, (res: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       // console.log("Get daily records", res.data);
       if (res.success) {
         res.data.sort((a: any, b: any) => Number(b.ageDays) - Number(a.ageDays));
         this.logEntries.set(res.data);
       }
     }, (err: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       console.log(err);
     });
   }
@@ -110,8 +109,7 @@ export class FeedLog {
           pricePerKg: Number(this.feedLogModel().pricePerKg || 0),
           driverName: this.feedLogModel().driverName,
           driverContact: this.feedLogModel().driverContact,
-          vehicleNumber: this.feedLogModel().vehicleNumber,
-          isActive: this.feedLogModel().isActive,
+          vehicleNumber: this.feedLogModel().vehicleNumber
         },
         ...list
       ]);
@@ -121,14 +119,15 @@ export class FeedLog {
   }
 
   postFeedEntry(payload: any) {
+    this.isLoading.set(true);
     this.apiService.post('/feed/receipt', payload, (res: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       if (res.success) {
         this.toggleFormView(false);
         this.getFeedRecord();
       }
     }, (err: any) => {
-      this.isLoading = false;
+      this.isLoading.set(false);
       console.log(err);
     });
   }
