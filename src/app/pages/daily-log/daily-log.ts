@@ -28,6 +28,7 @@ export class DailyLog {
     dailyFeedBagsConsumed: '',
     dailyBodyWeight: '',
     noOfBirdsForWeight: 10,
+    dailyWaterTanksConsumed: '',
     batchId: '',
   });
 

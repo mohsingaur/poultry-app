@@ -115,19 +115,26 @@
 @if(!isLoading() && selectedBatch()){
 <div style="width: 100%; display: flex; gap: 10px; justify-content: center; align-items: center; margin-top: 1rem;  ">
     <button class="btn btn-primary" (click)="reloadBatchPerformance(selectedBatch().batchId)" [disabled]="isLoading()">
-        <!-- <mat-icon>dashboard</mat-icon> -->
-        Refresh
+        Reload Data
     </button>
 </div>
 }
 
-<div class="content-scroll-area">
+@if (isDashboardLoading()) {
+<div class="loader-container">
+    <div class="loading-glow"></div>
+    <p>Retrieving graphs data from database...</p>
+</div>
+}
+<p style="text-align: center; color: aliceblue; font-size: 0.5rem; margin-top: 0.5rem;">Scroll-X to see other graphs</p>
+
+<div class="dashboard-content" style="margin-top: 1rem;">
     <div class="charts-grid">
         @for (chart of chartsData(); track $index) {
         <div class="charts-item jumbotron-card">
             <div class="chart-header">
                 <h3 class="chart-title">{{ chart.chartTitle }}</h3>
-                <p class="chart-subtitle">Overview and analytical breakdown</p>
+                <!-- <p class="chart-subtitle">Overview and analytical breakdown</p> -->
             </div>
 
             <div class="chart-body">
@@ -139,5 +146,4 @@
         </div>
         }
     </div>
-
 </div>

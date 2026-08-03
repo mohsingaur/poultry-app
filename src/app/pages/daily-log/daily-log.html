@@ -43,18 +43,28 @@
                     <th>Upload Date</th>
                     <th>Chicks Age</th>
                     <th>Mortality</th>
-                    <th>Feed Consumed</th>
+                    <th>Feed Intake</th>
+                    <th>Water Intake</th>
                     <th>Body Weight</th>
                 </tr>
             </thead>
             <tbody>
                 @for (row of logEntries(); track $index) {
                 <tr>
-                    <td class="col-green col-date">{{ row.uploadDate | date: 'dd-MM-yyyy' }}</td>
+                    <td class="col-green col-date">{{ row.uploadDate | date: 'dd/MM/yyyy' }}</td>
                     <td class="col-green">Day {{ row.ageDays }}</td>
-                    <td class="col-val">{{ row.dailyMortality }} <span class="symbol-hash">#</span></td>
-                    <td class="col-val">{{ row.dailyFeedBagsConsumed }} <span class="symbol-hash">bags</span></td>
-                    <td class="col-cyan">{{ row.avgBodyWeight }} <span class="symbol-hash">g</span></td>
+                    <td class="col-val">{{ row.dailyMortality }}
+                        @if(row.dailyMortality){ <span class="symbol-hash">#</span> }
+                    </td>
+                    <td class="col-val">{{ row.dailyFeedBagsConsumed }}
+                        @if(row.dailyFeedBagsConsumed){ <span class="symbol-hash">bags</span> }
+                    </td>
+                    <td class="col-val">{{ row.dailyWaterTanksConsumed }}
+                        @if(row.dailyWaterTanksConsumed){ <span class="symbol-hash">tanks</span> }
+                    </td>
+                    <td class="col-cyan">{{ row.avgBodyWeight }}
+                        @if(row.avgBodyWeight){ <span class="symbol-hash">g</span> }
+                    </td>
                 </tr>
                 }
             </tbody>
@@ -76,9 +86,14 @@
                             [formField]="dailyLogForm.dailyMortality">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Feed Consumed <small>(bags)</small></label>
+                        <label class="form-label">Feed Intake <small>(bags)</small></label>
                         <input type="number" class="form-input" placeholder="e.g. 5"
                             [formField]="dailyLogForm.dailyFeedBagsConsumed">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Water Intake <small>(tanks)</small></label>
+                        <input type="number" class="form-input" placeholder="e.g. 1.5"
+                            [formField]="dailyLogForm.dailyWaterTanksConsumed">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Body Weight <small>(gm)</small> </label>

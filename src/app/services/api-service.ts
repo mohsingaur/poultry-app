@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Utility } from '../utility/data-store';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  // private readonly baseUrl = 'http://localhost:3004/api/v1';
-  private readonly baseUrl = 'https://saspf-server-zm7y.onrender.com/api/v1';
+  private readonly baseUrl = environment.apiUrl;
   private readonly http = inject(HttpClient);
 
   getBatchPerformance(id: number): Observable<any> {

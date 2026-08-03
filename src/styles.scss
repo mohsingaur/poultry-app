@@ -349,7 +349,7 @@ main.main-wrapper>*:not(router-outlet) {
 }
 
 .col-green {
-    color: #27fa07;
+    color: #30f712;
     font-weight: 600;
 }
 
@@ -369,7 +369,7 @@ main.main-wrapper>*:not(router-outlet) {
 }
 
 .symbol-hash {
-    color: #81f66f;
+    color: #30f712;
     font-size: 0.5rem;
 }
 
@@ -388,7 +388,7 @@ main.main-wrapper>*:not(router-outlet) {
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .form-group {
@@ -399,15 +399,15 @@ main.main-wrapper>*:not(router-outlet) {
 
 .form-label {
     font-family: 'Outfit', sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     font-weight: 600;
-    color: #3de124;
+    color: #30f712;
+    letter-spacing: .75px;
     text-transform: uppercase;
-    letter-spacing: 0.75px;
 
     small {
         color: #a3fc96;
-        font-size: 0.4rem;
+        font-size: 0.45rem;
     }
 }
 
@@ -720,7 +720,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     gap: 3px;
     background: none;
     border: none;
-    color: #64748b;
+    color: #d8dee7;
     cursor: pointer;
     font-size: 10px;
 }

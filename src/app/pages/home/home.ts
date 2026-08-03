@@ -14,6 +14,7 @@ import { ChartComponent } from "../chart/chart";
 export class Home {
 
   isLoading = signal(false);
+  isDashboardLoading = signal(false);
   selectedBatch = signal<any>({});
   chartsData = signal<any[]>([]);
 
@@ -29,6 +30,7 @@ export class Home {
   }
 
   reloadBatchPerformance(batchId: any) {
+    this.getDashBoard();
     this.isLoading.set(true);
     this.apiService.getBatchPerformance(batchId).subscribe({
       next: (res: any) => {
@@ -51,15 +53,15 @@ export class Home {
   }
 
   getDashBoard() {
-    this.isLoading.set(true);
+    this.isDashboardLoading.set(true);
     this.apiService.get("/dashboard", { batchId: this.selectedBatch().batchId }, (res: any) => {
-      this.isLoading.set(false);
+      this.isDashboardLoading.set(false);
       // console.log("Get dashboard data", res.data);
       const data = this.transformDashboardData(res);
       // console.log("Transformed dashboard data", data);
       this.chartsData.set(data.chartsData);
     }, (err: any) => {
-      this.isLoading.set(false);
+      this.isDashboardLoading.set(false);
       console.log(err);
     });
   }
@@ -219,7 +221,7 @@ export class Home {
         labels: categories,
         datasets: [
           {
-            label: 'Standard FCR',
+            label: 'Standard',
             data: rawList.map((item: any) => Number(item.standardFCR) || 0),
             backgroundColor: '#115f13',
             borderColor: '#115f13',
@@ -229,7 +231,7 @@ export class Home {
             pointRadius: 2
           },
           {
-            label: 'Actual FCR',
+            label: 'Actual',
             data: rawList.map((item: any) => Number(item.actualFCR) || 0),
             backgroundColor: '#ff2d2d',
             borderColor: '#ff2d2d',
@@ -242,13 +244,13 @@ export class Home {
       },
     },
     {
-      chartTitle: 'Feed Intake',
+      chartTitle: 'Feed Intake (gms)',
       type: 'line',
       data: {
         labels: categories,
         datasets: [
           {
-            label: 'Standard Feed Intake (g)',
+            label: 'Standard',
             data: rawList.map((item: any) => Number(item.dailyStandardFeedIntakeGms) || 0),
             backgroundColor: '#115f13',
             borderColor: '#115f13',
@@ -258,7 +260,7 @@ export class Home {
             pointRadius: 2
           },
           {
-            label: 'Actual Feed Intake (g)',
+            label: 'Actual',
             data: rawList.map((item: any) => Number(item.dailyActualFeedIntakeGms) || 0),
             backgroundColor: '#ff2d2d',
             borderColor: '#ff2d2d',
@@ -271,7 +273,7 @@ export class Home {
       },
     },
     {
-      chartTitle: 'Mortality',
+      chartTitle: 'Mortality #',
       type: 'line',
       data: {
         labels: categories,
@@ -294,13 +296,13 @@ export class Home {
       },
     },
     {
-      chartTitle: 'Body Weight',
+      chartTitle: 'Body Weight (gms)',
       type: 'line',
       data: {
         labels: categories,
         datasets: [
           {
-            label: 'Standard Body Weight (g)',
+            label: 'Standard',
             data: rawList.map((item: any) => Number(item.dailyStdBodyWeightGms) || 0),
             backgroundColor: '#115f13',
             borderColor: '#115f13',
@@ -310,7 +312,7 @@ export class Home {
             pointRadius: 2
           },
           {
-            label: 'Actual Body Weight (g)',
+            label: 'Actual',
             data: rawList.map((item: any) => Number(item.dailyActualBodyWeightGms) || 0),
             backgroundColor: '#ff2d2d',
             borderColor: '#ff2d2d',
