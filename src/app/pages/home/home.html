@@ -25,7 +25,7 @@
     <div class="detail-item">
         <span class="label">Chicks Age</span>
         <span class="value">
-            {{ getAgeInDays(selectedBatch().startDate) }}
+            {{ getAgeInDays(selectedBatch().startDate, selectedBatch().endDate) }}
             <small>(Days)</small>
         </span>
     </div>
@@ -120,13 +120,11 @@
 </div>
 }
 
-@if (isDashboardLoading()) {
-<div class="loader-container">
-    <div class="loading-glow"></div>
-    <p>Retrieving graphs data from database...</p>
-</div>
-}
-<p style="text-align: center; color: aliceblue; font-size: 0.5rem; margin-top: 0.5rem;">Scroll-X to see other graphs</p>
+@if (!isDashboardLoading()) {
+
+<p style="text-align: center; color: aliceblue; font-size: 0.5rem; margin-top: 0.5rem;">
+    Scroll →→→→ to see other graphs
+</p>
 
 <div class="dashboard-content" style="margin-top: 1rem;">
     <div class="charts-grid">
@@ -147,3 +145,4 @@
         }
     </div>
 </div>
+}

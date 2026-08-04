@@ -76,7 +76,7 @@ export class Home {
     const diffInMs = Math.abs(end - start);
 
     // Convert ms to days and add 1 so the start date counts as Day 1
-    return Math.floor(diffInMs / (1000 * 60 * 60 * 24)) + 1;
+    return Math.floor(diffInMs / (1000 * 60 * 60 * 24)) + 2;
   }
 
   /**
@@ -212,7 +212,7 @@ export class Home {
     }));
 
     // 4. Construct Charts Data
-    const categories = rawList.map((item: any) => item.ageDays);
+    const categories = rawList.map((item: any) => item.ageDays).sort((a: any, b: any) => a - b);
 
     const chartsData = [{
       chartTitle: 'FCR',
