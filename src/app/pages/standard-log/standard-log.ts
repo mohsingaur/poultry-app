@@ -3,10 +3,11 @@ import { ApiService } from '../../services/api-service';
 import { ActivatedRoute } from '@angular/router';
 import { form, required } from '@angular/forms/signals';
 import { Utility } from '../../utility/data-store';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-standard-log',
-  imports: [],
+  imports: [DecimalPipe],
   templateUrl: './standard-log.html',
   styleUrl: './standard-log.scss',
 })
@@ -23,6 +24,7 @@ export class StandardLog {
   uploadSuccess = signal(false);
   uploadError = signal<string | null>(null);
   isUploading = signal(false);
+  liveBirdsStock = signal(0);
 
   // inject dependencies
   private apiService = inject(ApiService);
@@ -54,6 +56,7 @@ export class StandardLog {
     if (batches.length > 0) {
       let batch = batches.find((b: any) => b.batchId == this.batchId);
       this.companyId = batch?.companyId;
+      this.liveBirdsStock.set(batch?.liveBirdsStock);
     }
   }
 

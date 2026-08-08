@@ -24,7 +24,7 @@
             <p>Retrieving reference standard log from database...</p>
         </div>
         }
-        @if (!isLoading() && logEntries()?.length == 0) {
+        @if (!isLoading() && logEntries()?.length == 0 && !isFormOpen()) {
         <!-- Empty State -->
         <div class="empty-state">
             <div class="empty-icon">📂</div>
@@ -45,8 +45,8 @@
                         <th>Std Feed Intake</th>
                         <th>Std Body Weight</th>
                         <th>Std FCR</th>
-                        <th>Std Temperature</th>
-                        <th>Std Humidity</th>
+                        <th>MAX Temp.</th>
+                        <th>MAX Humidity</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,11 +54,11 @@
                     @for(item of logEntries(); track $index){
                     <tr>
                         <td class="col-green">Day {{item.ageDays}}</td>
-                        <td>{{item.standardFeedIntake}}</td>
+                        <td>{{item.standardFeedIntake }}</td>
                         <td>{{item.standardBodyWeight}}</td>
-                        <td>{{item.standardFCR}}</td>
-                        <td>{{item.temperature}}</td>
-                        <td>{{item.humidity}}</td>
+                        <td class="col-cyan">{{item.standardFCR | number: '1.2-2'}}</td>
+                        <td>{{item.maxTemperature}}</td>
+                        <td>{{item.maxHumidity}}</td>
                     </tr>
                     }
                 </tbody>

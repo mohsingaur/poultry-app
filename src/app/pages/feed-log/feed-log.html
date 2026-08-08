@@ -24,14 +24,11 @@
             <p>Retrieving reference feed log from database...</p>
         </div>
         }
-        @if (!isLoading() && logEntries()?.length == 0) {
+        @if (!isLoading() && logEntries()?.length == 0 && !isFormOpen()) {
         <!-- Empty State -->
         <div class="empty-state">
             <div class="empty-icon">📂</div>
             <h3>No feed log found for this batch</h3>
-            <p>
-                Kindly add a new feed log.
-            </p>
         </div>
         }
 
@@ -53,8 +50,8 @@
                     <!-- Data rows rendered by Javascript -->
                     @for(item of logEntries(); track $index){
                     <tr>
-                        <td>{{item.feed.itemName}}</td>
-                        <td>{{item.receiptDate | date:'dd-MM-yyyy'}}</td>
+                        <td class="col-green">{{item.feed.itemName}}</td>
+                        <td>{{item.receiptDate | date:'dd/MM/yyyy'}}</td>
                         <td>{{item.feed.itemCode}}</td>
                         <td>{{item.feed.itemDescription}}</td>
                         <td>{{item.quantity}} <span class="symbol-hash">(bags)</span></td>

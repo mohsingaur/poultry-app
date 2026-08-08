@@ -24,14 +24,11 @@
             <p>Retrieving reference daily log from database...</p>
         </div>
         }
-        @if (!isLoading() && logEntries()?.length == 0) {
+        @if (!isLoading() && logEntries()?.length == 0 && !isFormOpen()) {
         <!-- Empty State -->
         <div class="empty-state">
             <div class="empty-icon">📂</div>
             <h3>No daily log found for this batch</h3>
-            <p>
-                Kindly add a new daily log.
-            </p>
         </div>
         }
 
@@ -40,7 +37,7 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Upload Date</th>
+                    <th>Date</th>
                     <th>Chicks Age</th>
                     <th>Mortality</th>
                     <th>Feed Intake</th>

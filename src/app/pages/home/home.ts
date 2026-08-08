@@ -223,7 +223,7 @@ export class Home {
           {
             label: 'Standard',
             data: rawList.map((item: any) => Number(item.standardFCR) || 0),
-            backgroundColor: '#115f13',
+            backgroundColor: '#37115fff',
             borderColor: '#115f13',
             borderWidth: 1,
             tension: 0.4,
