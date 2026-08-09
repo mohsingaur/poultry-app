@@ -52,6 +52,7 @@ export class Login {
           Utility.setFarmer(res.data.farmerDetails);
           Utility.setFarms(res.data.farmsDetail);
           Utility.setBatches(res.data.batchesDetail);
+          Utility.setStandardData(res.data.standardFarmData);
 
           this.route.navigate(['/home']);
         }

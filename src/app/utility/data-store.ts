@@ -29,6 +29,12 @@ export class Utility {
     static setBatches(batches: any[]) {
         localStorage.setItem('batches', JSON.stringify(batches));
     }
+    static setStandardData(data: any[]) {
+        localStorage.setItem('standardData', JSON.stringify(data));
+    }
+    static getStandardData() {
+        return JSON.parse(localStorage.getItem('standardData') || '[]');
+    }
     static clearAll() {
         localStorage.clear();
         sessionStorage.clear();

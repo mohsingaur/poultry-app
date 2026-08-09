@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { ApiService } from '../../services/api-service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { form, FormRoot, FormField, required } from '@angular/forms/signals';
+import { Utility } from '../../utility/data-store';
 
 @Component({
   selector: 'app-daily-log',
-  imports: [DatePipe, FormRoot, FormField],
+  imports: [DatePipe, FormRoot, FormField, DecimalPipe],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.scss',
 })
@@ -16,6 +17,7 @@ export class DailyLog {
   companyId: string = '';
   isLoading = signal<boolean>(false);
   logEntries = signal<any[]>([]);
+  stdBags = signal(0);
 
   // inject dependencies
   private apiService = inject(ApiService);
@@ -50,8 +52,10 @@ export class DailyLog {
   });
 
   toggleFormView(state?: boolean) {
-    console.log("state", state);
     this.isFormOpen.set(typeof state === 'boolean' ? state : !this.isFormOpen());
+    if (this.isFormOpen()) {
+      this.getStandardBagsConsumedToday();
+    }
   }
 
   constructor() {
@@ -110,6 +114,33 @@ export class DailyLog {
       this.isLoading.set(false);
       console.log(err);
     });
+  }
+
+  getStandardBagsConsumedToday(selectedDate?: string) {
+    console.log("selectedDate", selectedDate);
+    const batch = Utility.getBatches().find((item: any) => item.batchId == this.batchId);
+    const startDate = batch.startDate;
+    const liveBirdsStock = batch.liveBirdsStock;
+    const weightPerBag = batch.weightPerBag;
+
+    const today = new Date(selectedDate ?? Date.now()).getTime();
+    const batchStartDate = new Date(startDate).getTime();
+
+    // Difference in milliseconds
+    const diffInMs = today - batchStartDate;
+
+    // Convert ms to days and add 2 so the start date and end date counts as 2 Days
+    const day = Math.floor(diffInMs / (1000 * 60 * 60 * 24)) + 2;
+
+    const todayFeedIntake = Utility.getStandardData().find((item: any) => item.ageDays == day)?.standardFeedIntake;
+    if (todayFeedIntake && day > 0) {
+      let bagsConsumed = (Number(todayFeedIntake) * Number(liveBirdsStock)) / (1000 * Number(weightPerBag));
+      this.stdBags.set(bagsConsumed);
+    }
+    else {
+      this.stdBags.set(0);
+    }
+
   }
 
 }

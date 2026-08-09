@@ -54,7 +54,14 @@
     </div>
     <div class="detail-item">
         <span class="label">Avg Body Weight</span>
-        <span class="value">{{ selectedBatch().chicksAvgWeight | number: '1.0-0'}} <small>(GMS)</small></span>
+        <span class="value">
+            @if(selectedBatch().chicksAvgWeight < 1000){ {{ selectedBatch().chicksAvgWeight | number: '1.0-0' }} <small>
+                (GM/BIRD)</small>
+                }
+                @else{
+                {{ selectedBatch().chicksAvgWeight / 1000 | number: '1.2-3'}} <small>(KG/BIRD)</small>
+                }
+        </span>
     </div>
     <div class="detail-item">
         <span class="label">Total Birds Weight</span>
