@@ -31,7 +31,7 @@
     </div>
     <div class="detail-item">
         <span class="label">Chicks Placed</span>
-        <span class="value">{{ selectedBatch().housedChicks }}
+        <span class="value">{{ selectedBatch().chicksPlaced }}
             <small>#</small>
         </span>
     </div>
@@ -43,7 +43,7 @@
     </div>
     <div class="detail-item">
         <span class="label">Mortality %</span>
-        <span class="value">{{ (selectedBatch().totalMortality / selectedBatch().housedChicks * 100) | number:'1.2-2' }}
+        <span class="value">{{ (selectedBatch().totalMortality / selectedBatch().chicksPlaced * 100) | number:'1.2-2' }}
             <small>%</small></span>
     </div>
     <div class="detail-item">
