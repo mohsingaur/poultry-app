@@ -14,7 +14,7 @@ import { Utility } from '../../utility/data-store';
 export class DailyLog {
   isFormOpen = signal<boolean>(false);
   batchId: string = '';
-  companyId: string = '';
+  companyTypeDetailId: string = '';
   isLoading = signal<boolean>(false);
   logEntries = signal<any[]>([]);
   stdBags = signal(0);
@@ -25,7 +25,7 @@ export class DailyLog {
 
   dailyLogModel = signal({
     uploadDate: new Date().toISOString().substring(0, 10),
-    companyId: '',
+    companyTypeDetailId: '',
     dailyMortality: '',
     dailyFeedBagsConsumed: '',
     dailyBodyWeight: '',
@@ -44,7 +44,7 @@ export class DailyLog {
       action: async (field) => {
         let payload = field().value();
         payload.batchId = this.batchId;
-        payload.companyId = this.companyId || '1';
+        payload.companyTypeDetailId = this.companyTypeDetailId || '1';
         console.log(payload);
         this.postDailyEntry(payload);
       }

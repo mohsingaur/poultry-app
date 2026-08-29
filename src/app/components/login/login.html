@@ -18,30 +18,32 @@
     </div>
 </div>
 }
-<div style=" display: flex;flex-direction: column; justify-content: center; align-items: center;">
-    <!-- <div class="entry-form-container"> -->
+
+<div class="entry-form-container">
     <div class="form-heading">Login</div>
+
     <form [formRoot]="loginForm">
-        <div class="form-grid">
-            <div class="form-group">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-input" [formField]="loginForm.username" placeholder="Your Username">
-                @if (loginForm.username().touched() && loginForm.username().invalid()) {
-                @for(error of loginForm.username().errors(); track error) {
-                <p class="error">{{ error.message }}</p>
-                }
-                }
-            </div>
-            <div class="form-group">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-input" [formField]="loginForm.password" placeholder="Your password">
-                @if (loginForm.password().touched() && loginForm.password().invalid()) {
-                @for(error of loginForm.password().errors(); track error) {
-                <p class="error">{{ error.message }}</p>
-                }
-                }
-            </div>
+
+        <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" [formField]="loginForm.username" placeholder="Your Username">
+            @if (loginForm.username().touched() && loginForm.username().invalid()) {
+            @for(error of loginForm.username().errors(); track error) {
+            <p class="error">{{ error.message }}</p>
+            }
+            }
         </div>
+
+        <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" [formField]="loginForm.password" placeholder="Your password">
+            @if (loginForm.password().touched() && loginForm.password().invalid()) {
+            @for(error of loginForm.password().errors(); track error) {
+            <p class="error">{{ error.message }}</p>
+            }
+            }
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary" [disabled]="loginForm().invalid() || isLoading()">
                 @if (isLoading()) {
@@ -55,4 +57,3 @@
         </div>
     </form>
 </div>
-<!-- </div> -->

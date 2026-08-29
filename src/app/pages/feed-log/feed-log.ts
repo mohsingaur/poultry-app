@@ -15,7 +15,7 @@ export class FeedLog {
   isFormOpen = signal<boolean>(false);
   feedTypeMaster = signal<any[]>([]);
   batchId: string = '';
-  companyId: string = '';
+  companyTypeDetailId: string = '';
   logEntries = signal<any[]>([]);
 
   // inject dependencies

@@ -24,7 +24,7 @@ export class Login {
   loginModel = signal({
     username: '',
     password: '',
-    userType: 'AppUser'
+    portal: 'app'
   });
   loginForm = form(this.loginModel, (path) => {
     required(path.username, { message: "Username is required" });

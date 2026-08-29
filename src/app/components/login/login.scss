@@ -1,0 +1,37 @@
+.alert {
+    position: absolute;
+    width: -webkit-fill-available;
+    margin-right: 1rem;
+}
+
+.entry-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+}
+
+.form-heading {
+    color: #36f700;
+}
+
+form {
+    width: 100%;
+
+    .form-label {
+        padding-bottom: 0.2rem;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .error {
+        font-size: 0.8rem;
+        color: #ff006a;
+        font-weight: 500;
+    }
+}
