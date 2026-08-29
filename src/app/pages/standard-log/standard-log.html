@@ -4,7 +4,8 @@
     <div class="card-header-fixed">
         <div class="card-title-bar">
             <h2 class="card-title">{{ isFormOpen() ? 'Upload Standard Daily Log' : 'Standard Daily Log' }}</h2>
-            <button class="btn-new-entry" [class.active-cancel]="isFormOpen()" (click)="toggleFormView()">
+            <button class="btn-new-entry" [class.active-cancel]="isFormOpen()" (click)="toggleFormView()"
+                [disabled]="isLoading()">
                 {{ isFormOpen() ? '✕ Close Form' : '+ Upload' }}
             </button>
         </div>
